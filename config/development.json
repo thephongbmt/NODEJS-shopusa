@@ -1,0 +1,11 @@
+{
+  "NAME": "development",
+  "PORT": 3001,
+  "JWT_SECRET":"|3u`j+h3+Ph0k",
+  "SENTRY": "https://ccb54b15e7614aaf9d4deeaca3d2c1ea@sentry.io/1245309",
+  "MONGO_DB":{
+    "HOST":"127.0.0.1",
+    "PORT":"27017",
+    "NAME":"portfolio"
+  }
+}
