@@ -29,6 +29,7 @@
     "prefer-template": 2,
     "space-infix-ops": ["error"],
     "semi": ["error", "always"],
+    "no-useless-escape":"off",
     "comma-spacing": ["error", { "before": false, "after": true }],
     "key-spacing": [
       "error",
