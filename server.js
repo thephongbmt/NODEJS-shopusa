@@ -5,18 +5,9 @@ import compression from 'compression';
 import cors from 'cors';
 import router from './api';
 import { middleware } from './middleware/express';
-import {
-  SENTRY,
-  PORT,
-  ENV,
-  DESCRIPTION,
-  DB_HOST,
-  DB_PORT,
-  DB_NAME
-} from './constant';
+import { SENTRY, PORT, ENV, DESCRIPTION, DB_HOST, DB_PORT, DB_NAME } from './constant';
 import Log from './lib/Log.class';
 import MongoDB from './db/MongoDB.class';
-
 //connect to database
 const database = new MongoDB(DB_HOST, DB_PORT, DB_NAME);
 database.connect();
@@ -63,8 +54,7 @@ app.use(Raven.errorHandler());
 
 const server = app.listen(PORT || 3000, () => {
   let port = server.address().port;
-  let host =
-    server.address().address === '::' ? 'localhost' : server.address().address;
+  let host = server.address().address === '::' ? 'localhost' : server.address().address;
   Log.info(
     `- ${DESCRIPTION}
   + Server is running at http://${host}:${port}
@@ -74,3 +64,4 @@ const server = app.listen(PORT || 3000, () => {
 });
 
 export default server;
+
