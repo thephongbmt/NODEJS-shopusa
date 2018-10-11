@@ -50,10 +50,9 @@ export const changeStatusProduct = async (ids, status) => {
     throw e.message;
   }
 };
-export const getListNewProduct = () => {};
+export const getListNewProduct = () => {  };
 /**
  * REPORT
  */
 export const reportProductView = () => {};
 export const reportProductOfType = () => {};
-export const test = () =>{};
