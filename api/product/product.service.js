@@ -56,3 +56,4 @@ export const getListNewProduct = () => {  };
  */
 export const reportProductView = () => {};
 export const reportProductOfType = () => {};
+export const test = () =>{};
