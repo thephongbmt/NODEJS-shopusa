@@ -1,4 +1,4 @@
-import { test } from '../utils/test';
+import { testUtilst } from '../utils';
 import server from '../server';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
@@ -21,4 +21,4 @@ let testCasesGetPing = [
     }
   }
 ];
-test('[GET]-/ping', testCasesGetPing);
+testUtilst('[GET]-/ping', testCasesGetPing);

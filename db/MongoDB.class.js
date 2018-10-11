@@ -13,11 +13,7 @@ class MongoDB {
     Log.success(`${this.connectionString} : ${MESSAGE.CONNECT_DB_SUCCESS}.`);
   }
   connectError(error) {
-    Log.error(
-      `${this.connectionString} : ${MESSAGE.CONNECT_DB_ERROR} : ${
-        error.message
-      } `
-    );
+    Log.error(`${this.connectionString} : ${MESSAGE.CONNECT_DB_ERROR} : ${error.message} `);
 
     //reconnect if have cant not connect to db or some thing wrong
     setTimeout(() => {
@@ -43,6 +39,7 @@ export default MongoDB;
 
 const option = {
   useNewUrlParser : true,
+  autoReconnect   : true,
   autoIndex       : false, // Don't build indexes
   poolSize        : 10, // Maintain up to 10 socket connections
   bufferMaxEntries: 0,

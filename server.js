@@ -8,6 +8,7 @@ import { middleware } from './middleware/express';
 import { SENTRY, PORT, ENV, DESCRIPTION, DB_HOST, DB_PORT, DB_NAME } from './constant';
 import Log from './lib/Log.class';
 import MongoDB from './db/MongoDB.class';
+
 //connect to database
 const database = new MongoDB(DB_HOST, DB_PORT, DB_NAME);
 database.connect();
@@ -64,4 +65,3 @@ const server = app.listen(PORT || 3000, () => {
 });
 
 export default server;
-

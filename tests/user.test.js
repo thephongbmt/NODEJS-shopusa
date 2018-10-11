@@ -1,4 +1,4 @@
-import { testHelper } from '../utils/test';
+import { testHelper } from '../utils';
 import server from '../server';
 import chai from 'chai';
 import chaiHttp from 'chai-http';

@@ -3,7 +3,7 @@ import message from './message';
 
 //variable constaint
 export const DEFAULT_PUBLIC_ERROR = false;
-
+export const FORMAT_DATE_DEFAULT = 'DD-MM-YYYY HH:mm:ss';
 //get constaint in message
 export const MESSAGE = message;
 
