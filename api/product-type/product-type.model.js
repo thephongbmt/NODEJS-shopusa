@@ -1,13 +1,14 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
+import { STATUS } from '../../constant';
 
 const productTypeSchema = new Schema({
   _id        : Schema.Types.ObjectId,
   name       : String,
-  status     : Boolean,
-  image      : [{ name: String, url: String }],
+  status     : { type: String, enum: STATUS.ENUM, default: STATUS.DEFAULT },
+  images     : [{ name: String, url: String }],
   description: String
 });
 
-const ProductType = model('ProductType', productTypeSchema);
+const ProductType = mongoose.model('ProductType', productTypeSchema);
 
 export default ProductType;

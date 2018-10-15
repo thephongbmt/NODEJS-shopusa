@@ -1,4 +1,5 @@
 export default {
+  UPDATE_FAIL       : 'update status fail',
   //DB messsage
   CONNECT_DB_SUCCESS: 'Connect to database successful',
   CONNECT_DB_ERROR  : 'Connect to databse fail',

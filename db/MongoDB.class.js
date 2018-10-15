@@ -2,6 +2,8 @@
 import mongoose from 'mongoose';
 import Log from '../lib/Log.class';
 import { MESSAGE, DB_RECONNECT_TIME } from '../constant';
+//set Promise for mongoose
+mongoose.Promise = global.Promise;
 class MongoDB {
   constructor(host, port, name) {
     this.host = host;

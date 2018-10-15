@@ -4,7 +4,7 @@ export const getProduct = async (product, option) => {
   return await model.find(
     {
       name           : product.name,
-      status         : product.status,
+      status         : { $ne: 'delete' },
       product_type_id: product.product_type_id,
       price          : product.price
     },
