@@ -16,6 +16,7 @@ const productSchema = new Schema({
   updated_date   : { type: Date, default: moment().format(FORMAT_DATE_DEFAULT) },
   updated_user   : { type: String, required: [true, messageUtils.required('update_user')] }
 });
+
 productSchema.pre('save').then(() => {
   alert('save');
 });

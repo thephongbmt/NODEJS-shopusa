@@ -1,21 +1,24 @@
 import model from './product-type.model';
-import { MESSAGE } from '../../constant';
-export const getProductType = async (field, option) => {
+import { MESSAGE, STATUS } from '../../constant';
+
+export const getProductType = async () => {
   try {
-    let data = await model.find(field, option);
+    let data = await model.find({ status: { $ne: STATUS.DELETE } });
     return data;
   } catch (e) {
-    throw e.message;
+    throw e;
   }
 };
+
 export const addProductType = async type => {
   try {
     let data = await model.create(type);
     return data._id;
   } catch (e) {
-    throw e.message;
+    throw e;
   }
 };
+
 export const changeStatusProductType = async (ids = [], status) => {
   try {
     let multi = [];
@@ -29,9 +32,15 @@ export const changeStatusProductType = async (ids = [], status) => {
       throw MESSAGE.UPDATE_FAIL;
     }
   } catch (e) {
-    throw e.message;
+    throw e;
   }
 };
-export const updateProductType = () => {
 
+export const updateProductType = async (id, data) => {
+  try {
+    let res = await model.update({ _id: id }, data);
+    return !!res;
+  } catch (e) {
+    throw e;
+  }
 };

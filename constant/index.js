@@ -4,10 +4,7 @@ import message from './message';
 //variable constaint
 export const DEFAULT_PUBLIC_ERROR = false;
 export const FORMAT_DATE_DEFAULT = 'DD-MM-YYYY HH:mm:ss';
-export const STATUS = {
-  ENUM   : ['inactive', 'active', 'delete'],
-  DEFAULT: 'active'
-};
+
 //get constant in config
 export const PORT = config.get('PORT');
 export const SENTRY = config.get('SENTRY');
@@ -23,3 +20,15 @@ export const DB_RECONNECT_TIME = 1000; // ms
 
 //get constaint in message
 export const MESSAGE = message;
+
+//constain STATUS
+const STATUS_INACTIVE = 'inactive';
+const STATUS_ACTIVE = 'active';
+const STATUS_DELETE = 'delete';
+export const STATUS = {
+  INACTIVE: STATUS_INACTIVE,
+  ACTIVE  : STATUS_ACTIVE,
+  DELETE  : STATUS_DELETE,
+  ENUM    : [STATUS_INACTIVE, STATUS_ACTIVE, STATUS_DELETE],
+  DEFAULT : STATUS_ACTIVE
+};

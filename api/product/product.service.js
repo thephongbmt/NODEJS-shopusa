@@ -1,4 +1,5 @@
 import model from './product.model';
+import { MESSAGE } from '../../constant';
 
 export const getProduct = async (product, option) => {
   return await model.find(
@@ -46,7 +47,11 @@ export const changeStatusProduct = async (ids, status) => {
       multiUpdate.push(model.update({ _id: id }, { status: status }));
     });
     let isAlreadyDone = await Promise.all(multiUpdate);
-    return isAlreadyDone;
+    if (isAlreadyDone) {
+      return isAlreadyDone;
+    } else {
+      throw MESSAGE.UPDATE_FAIL;
+    }
   } catch (e) {
     throw e.message;
   }
