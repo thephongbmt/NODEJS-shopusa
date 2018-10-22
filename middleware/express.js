@@ -1,7 +1,6 @@
 //import Raven from 'raven';
 import { MESSAGE } from '../constant';
 import httpStatus from 'http-status';
-import expressValidation from 'express-validation';
 import APIError from './APIError';
 
 export const middleware = {
@@ -16,11 +15,8 @@ export const middleware = {
         return res.status(status).json({ data: dataObj });
       };
 
-      let resError = (
-        message = MESSAGE.ERROR_MESSAGE_DEFAULT,
-        status = httpStatus.INTERNAL_SERVER_ERROR
-      ) => {
-        return new APIError(message, status);
+      let resError = (message = MESSAGE.ERROR_MESSAGE_DEFAULT, status = httpStatus.INTERNAL_SERVER_ERROR) => {
+        next({ message, status });
       };
       res.SUCCESS = resSuccess;
       res.ERROR = resError;
@@ -31,9 +27,7 @@ export const middleware = {
   */
   handleNotFoundRequest: app => {
     app.use((req, res, next) => {
-      return next(
-        res.ERROR('OPs going some where !', httpStatus.NOT_FOUND, false)
-      );
+      return next(res.ERROR('OPs going some where !', httpStatus.NOT_FOUND, false));
     });
   },
   /*
@@ -41,17 +35,15 @@ export const middleware = {
   */
   handleError: app =>
     app.use((err, req, res, next) => {
-      err = _convertErr(err);
+      let apiError = _convertErr(err.message, err.status);
       let message =
-        err.isPublic || req.query.error === '1'
+        req.query.error === '1'
           ? {
-            message: err.message,
-            stack  : err.stack
+            message: apiError.message,
+            stack  : apiError.stack
           }
           : {
-            message: `${err.status}-${httpStatus[`${err.status}_NAME`]}-${
-              err.message
-            }`
+            message: `${apiError.status}-${httpStatus[`${apiError.status}_NAME`]}`
           };
       res.status(httpStatus.INTERNAL_SERVER_ERROR).json(message);
       //return Raven.captureException(err);
@@ -66,19 +58,14 @@ export const middleware = {
 /*
   covert error to custom API Error
 */
-const _convertErr = err => {
-  let errorAPI;
-
-  if (typeof err === 'string') {
-    errorAPI = new APIError(err, httpStatus.INTERNAL_SERVER_ERROR);
-  } else if (err instanceof expressValidation.ValidationError) {
-    // validation error contains errors which is an array of error each containing message[]
-    const unifiedErrorMessage = err.errors
-      .map(error => error.messages.join('. '))
-      .join(' and ');
-    errorAPI = new APIError(unifiedErrorMessage, err.status);
-  } else {
-    errorAPI = new APIError(err.message, err.status);
+const _convertErr = (error, status) => {
+  let message;
+  if (typeof error === 'string') {
+    message = error;
+  } else if (error instanceof Array) {
+    message = error.map(err => err.message);
+  } else if (typeof error === 'object') {
+    message = error.message ? error.message : error;
   }
-  return errorAPI;
+  return new APIError(message, status);
 };

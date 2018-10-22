@@ -7,5 +7,6 @@ export default {
   RECONNECT_DB      : 'Trying to reconnect',
 
   //Message resposne
+  INVALID              : 'is invalid',
   ERROR_MESSAGE_DEFAULT: 'Some thing wrong !'
 };

@@ -1,33 +1,42 @@
 import { model } from 'mongoose';
 import service from './product-type.service';
-import { MESSAGE } from '../../constant';
+import { MESSAGE, STATUS } from '../../constant';
+import joi from 'joi';
 
-export const getAll = async (req, res, next) => {
+export const getAll = async (req, res) => {
   try {
     let products = await service.getAll();
     return res.SUCCESS(products);
   } catch (e) {
-    next(e);
+    return res.ERROR(e);
   }
 };
 
-export const changeStatus = async (req, res, next) => {
+export const changeStatus = async (req, res) => {
   try {
-    let query = req.query;
-    let ids = query.ids;
-    let status = query.status;
-    let data = await model.changeStatus(ids, status);
+    let schemaValidator = joi.object().keys({
+      ids   : joi.array().required,
+      status: joi
+        .string()
+        .allow(STATUS.ENUM)
+        .required()
+    });
+    const { error, value } = joi.validate(req.query, schemaValidator, { abortEarly: false });
+    if (error) {
+      return res.ERROR(error);
+    }
+    let data = await model.changeStatus(value.ids, value.status);
     if (data) {
-      return res.SUCCESS(ids);
+      return res.SUCCESS(value.ids);
     } else {
-      next(MESSAGE.CHANGE_STATUS_FAIL);
+      return res.ERROR(MESSAGE.CHANGE_STATUS_FAIL);
     }
   } catch (e) {
-    next(e);
+    return res.ERROR(e);
   }
 };
 
-export const add = async (req, res, next) => {
+export const add = async (req, res) => {
   try {
     let query = req.query;
     let data = {
@@ -35,14 +44,22 @@ export const add = async (req, res, next) => {
       images     : query.images,
       description: query.description
     };
+    let schemaValidator = joi.object.keys({
+      name       : joi.string().required.error(() => `name ${MESSAGE.INVALID}`),
+      description: joi.string().required(() => `description ${MESSAGE.INVALID}`)
+    });
+    let { error } = joi.validate(data, schemaValidator, { abortEarly: false });
+    if (error) {
+      return res.ERROR(error);
+    }
     let id = await model.addProductType(data);
     return res.SUCCESS(id);
   } catch (e) {
-    next(e);
+    return res.ERROR(e);
   }
 };
 
-export const update = async (req, res, next) => {
+export const update = async (req, res) => {
   try {
     let id = req.params.id;
     let query = req.query;
@@ -55,6 +72,6 @@ export const update = async (req, res, next) => {
     let obj = await model.updateProductType(id, data);
     return res.SUCCESS(obj);
   } catch (e) {
-    next(e);
+    return res.ERROR(e);
   }
 };

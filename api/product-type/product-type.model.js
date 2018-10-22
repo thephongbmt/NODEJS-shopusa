@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import { STATUS } from '../../constant';
+import { STATUS, FORMAT_DATE_DEFAULT } from '../../constant';
 import { messageUtils } from '../../utils';
 import moment from 'moment';
 
@@ -17,7 +17,10 @@ const productTypeSchema = new Schema({
   updated_user: { type: String, required: [true, messageUtils.required('created_date')] }
 });
 
-productTypeSchema.pre('');
+productTypeSchema.pre('update').then(next => {
+  this.updated_date = moment.format(FORMAT_DATE_DEFAULT);
+  next();
+});
 
 const ProductType = mongoose.model('ProductType', productTypeSchema);
 
