@@ -15,7 +15,7 @@ database.connect();
 const app = express();
 //MIDDLE WARE
 //Handler body parser Request
-app.use(bodyParser.urlencoded({ extended: false }, bodyParser.json()));
+app.use(bodyParser.urlencoded({ extended: true }, bodyParser.json()));
 //compress response
 app.use(compression());
 //cross origin resource sharing
