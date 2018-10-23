@@ -23,7 +23,6 @@ productTypeSchema.pre('save', function(error, doc, next) {
 });
 
 productTypeSchema.pre('updateMany', function(next) {
-  console.log('12123123');
   this.updated_date = DEFAULT_DATE;
   this.updated_user = 'phong_update';
   next();
