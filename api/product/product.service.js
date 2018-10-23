@@ -1,11 +1,11 @@
 import model from './product.model';
-import { MESSAGE } from '../../constant';
+import { MESSAGE, STATUS } from '../../constant';
 
 export const getProduct = async (product, option) => {
   return await model.find(
     {
       name           : product.name,
-      status         : { $ne: 'delete' },
+      status         : { $ne: STATUS.DELETE },
       product_type_id: product.product_type_id,
       price          : product.price
     },
@@ -17,6 +17,7 @@ export const getProduct = async (product, option) => {
     }
   );
 };
+
 export const getDetailProduct = async id => {
   try {
     return await model.findOne({ id: id });
@@ -24,6 +25,7 @@ export const getDetailProduct = async id => {
     throw e.message;
   }
 };
+
 export const addProduct = async product => {
   try {
     let obj = await model.create(product);
@@ -32,6 +34,7 @@ export const addProduct = async product => {
     throw e.message;
   }
 };
+
 export const updateProduct = async (id, data) => {
   try {
     let obj = await model.update({ _id: id }, data);
@@ -40,6 +43,7 @@ export const updateProduct = async (id, data) => {
     throw e.message;
   }
 };
+
 export const changeStatusProduct = async (ids, status) => {
   try {
     let multiUpdate = [];
@@ -56,6 +60,7 @@ export const changeStatusProduct = async (ids, status) => {
     throw e.message;
   }
 };
+
 export const getListNewProduct = async (topNumber, productTypeId) => {
   try {
     let data = await model.find({ product_type_id: productTypeId }, null, { sort: 'created_date', offset: 0, limit: topNumber });
@@ -64,6 +69,7 @@ export const getListNewProduct = async (topNumber, productTypeId) => {
     throw e.message;
   }
 };
+
 /**
  * REPORT
  */
@@ -79,6 +85,7 @@ export const reportProductView = async numberProduct => {
     throw e.message;
   }
 };
+
 export const reportProductTypeView = async numberProduct => {
   try {
     let data = await model.find(
@@ -91,6 +98,7 @@ export const reportProductTypeView = async numberProduct => {
     throw e.message;
   }
 };
+
 export const reportProductOfType = async () => {
   try {
     let data = await model

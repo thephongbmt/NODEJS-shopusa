@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.5.1/libexec/bin/yarn.js start
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.5.1/libexec/bin/yarn.js eslint-fix
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -42,6 +42,7 @@ npm manifest:
       "babel-preset-stage-3": "^6.24.1",
       "babel-register": "^6.26.0",
       "bcrypt": "^3.0.0",
+      "bluebird": "^3.5.2",
       "body-parser": "^1.18.3",
       "compression": "^1.7.3",
       "config": "^1.30.0",
@@ -765,6 +766,10 @@ Lockfile:
   bluebird@3.5.1:
     version "3.5.1"
     resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
+  
+  bluebird@^3.5.2:
+    version "3.5.2"
+    resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.2.tgz#1be0908e054a751754549c270489c1505d4ab15a"
   
   body-parser@1.18.2:
     version "1.18.2"
@@ -3244,7 +3249,7 @@ Trace:
   Error: Command failed.
   Exit code: 1
   Command: sh
-  Arguments: -c node -r babel-register -r babel-polyfill index.js
+  Arguments: -c ./node_modules/.bin/eslint --fix .
   Directory: /Users/duongxuannam/test/shop-usa
   Output:
   

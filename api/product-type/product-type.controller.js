@@ -1,10 +1,10 @@
-import { addProductType, changeStatusProductType, getProductType, updateProductType } from './product-type.service';
-import { MESSAGE, STATUS } from '../../constant';
-import joi from 'joi';
+import * as service from './product-type.service';
+import { MESSAGE } from '../../constant';
+import { shemaModify, shemaChangeStatus } from './request-validation';
 
 export const getAll = async (req, res) => {
   try {
-    let products = await getProductType();
+    let products = await service.getProductType();
     return res.SUCCESS(products);
   } catch (e) {
     return res.ERROR(e);
@@ -13,22 +13,15 @@ export const getAll = async (req, res) => {
 
 export const changeStatus = async (req, res) => {
   try {
-    let schemaValidator = joi.object().keys({
-      ids   : joi.array().required(),
-      status: joi
-        .string()
-        .allow(STATUS.ENUM)
-        .required()
-    });
     let reqData = {
       status: req.params.status,
       ids   : req.body.ids
     };
-    const { error, value } = joi.validate(reqData, schemaValidator, { abortEarly: false });
+    const { error, value } = res.VALIDATION(reqData, shemaChangeStatus);
     if (error) {
-      return res.ERROR(error);
+      return res.ERROR(error.details);
     }
-    let data = await changeStatusProductType(reqData.ids, reqData.status);
+    let data = await service.changeStatusProductType(reqData.ids, reqData.status);
     if (data) {
       return res.SUCCESS(value.ids);
     } else {
@@ -38,7 +31,6 @@ export const changeStatus = async (req, res) => {
     return res.ERROR(e);
   }
 };
-
 export const add = async (req, res) => {
   try {
     let query = req.body;
@@ -47,18 +39,13 @@ export const add = async (req, res) => {
       images     : query.images,
       description: query.description
     };
-    let schemaValidator = joi.object().keys({
-      name       : joi.string().required(),
-      images     : joi.array(),
-      description: joi.string().required()
-    });
-    let { error } = joi.validate(data, schemaValidator, { abortEarly: false });
-    data.updated_user = 'phong';
-    data.created_user = 'phong';
+
+    let { error } = res.VALIDATION(data, shemaModify);
+
     if (error) {
-      return res.ERROR(error);
+      return res.ERROR(error.details);
     }
-    let id = await addProductType(data);
+    let id = await service.addProductType(data);
     return res.SUCCESS(id);
   } catch (e) {
     return res.ERROR(e);
@@ -68,14 +55,18 @@ export const add = async (req, res) => {
 export const update = async (req, res) => {
   try {
     let id = req.params.id;
-    let query = req.query;
+    let body = req.body;
     let data = {
-      description: query.description,
-      status     : query.status,
-      name       : query.name,
-      images     : query.images
+      description: body.description,
+      status     : body.status,
+      name       : body.name,
+      images     : body.images
     };
-    let obj = await updateProductType(id, data);
+    let { error } = res.VALIDATION(data, shemaModify);
+    if (error) {
+      return res.ERROR(error.details);
+    }
+    let obj = await service.updateProductType(id, data);
     return res.SUCCESS(obj);
   } catch (e) {
     return res.ERROR(e);

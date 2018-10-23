@@ -2,10 +2,11 @@
 import mongoose from 'mongoose';
 import Log from '../lib/Log.class';
 import { MESSAGE, DB_RECONNECT_TIME } from '../constant';
-//set Promise for mongoose
-mongoose.Promise = global.Promise;
+import blueBird from 'bluebird';
 class MongoDB {
   constructor(host, port, name) {
+    //set Promise for mongoose
+    mongoose.Promise = blueBird;
     this.host = host;
     this.port = port;
     this.name = name;

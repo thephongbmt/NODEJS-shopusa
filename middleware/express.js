@@ -2,7 +2,7 @@
 import { MESSAGE } from '../constant';
 import httpStatus from 'http-status';
 import APIError from './APIError';
-
+import joi from 'joi';
 export const middleware = {
   /*
       ERR: handle for error response,
@@ -18,6 +18,8 @@ export const middleware = {
       let resError = (message = MESSAGE.ERROR_MESSAGE_DEFAULT, status = httpStatus.INTERNAL_SERVER_ERROR) => {
         next({ message, status });
       };
+      let resValidation = (data, shema) => joi.validate(data, shema, { abortEarly: false });
+      res.VALIDATION = resValidation;
       res.SUCCESS = resSuccess;
       res.ERROR = resError;
       next();
@@ -43,9 +45,10 @@ export const middleware = {
             stack  : apiError.stack
           }
           : {
-            message: `${apiError.status}-${httpStatus[`${apiError.status}_NAME`]}`
+            message: apiError.message //${apiError.status}-${httpStatus[`${apiError.status}_NAME`]}`
           };
-      res.status(httpStatus.INTERNAL_SERVER_ERROR).json(message);
+
+      res.status(apiError.status).json(message);
       //return Raven.captureException(err);
       return next();
     })
