@@ -4,10 +4,10 @@ import { MESSAGE, STATUS } from '../../constant';
 export const getProduct = async (product, option) => {
   return await model.find(
     {
-      name           : product.name,
-      status         : { $ne: STATUS.DELETE },
-      product_type_id: product.product_type_id,
-      price          : product.price
+      name         : product.name,
+      status       : { $ne: STATUS.DELETE },
+      productTypeId: product.productTypeId,
+      price        : product.price
     },
     null,
     {
@@ -18,7 +18,7 @@ export const getProduct = async (product, option) => {
   );
 };
 
-export const getDetailProduct = async id => {
+export const getProductById = async id => {
   try {
     return await model.findOne({ id: id });
   } catch (e) {
@@ -44,7 +44,7 @@ export const updateProduct = async (id, data) => {
   }
 };
 
-export const changeStatusProduct = async (ids, status) => {
+export const changeStatusProducts = async (ids, status) => {
   try {
     let multiUpdate = [];
     ids.map(id => {
@@ -63,7 +63,7 @@ export const changeStatusProduct = async (ids, status) => {
 
 export const getListNewProduct = async (topNumber, productTypeId) => {
   try {
-    let data = await model.find({ product_type_id: productTypeId }, null, { sort: 'created_date', offset: 0, limit: topNumber });
+    let data = await model.find({ productTypeId: productTypeId }, null, { sort: 'created_date', offset: 0, limit: topNumber });
     return data;
   } catch (e) {
     throw e.message;

@@ -1,9 +1,7 @@
+import * as controller from './product.controller';
 
+const ROUTE_NAME = '/product';
 export default route => {
-  route.post('/');
-  route.put('/status/:status');
-  route.put('/:id');
-  route.get('/');
-
+  route.post(`${ROUTE_NAME}`, controller.add);
   return route;
 };

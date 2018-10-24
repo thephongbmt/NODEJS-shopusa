@@ -18,8 +18,8 @@ export const middleware = {
       let resError = (message = MESSAGE.ERROR_MESSAGE_DEFAULT, status = httpStatus.INTERNAL_SERVER_ERROR) => {
         next({ message, status });
       };
-      let resValidation = (data, shema) => joi.validate(data, shema, { abortEarly: false });
-      res.VALIDATION = resValidation;
+      let reqValidation = (data, shema) => joi.validate(data, shema, { abortEarly: false });
+      req.VALIDATION = reqValidation;
       res.SUCCESS = resSuccess;
       res.ERROR = resError;
       next();
@@ -64,11 +64,19 @@ export const middleware = {
 const _convertErr = (error, status) => {
   let message;
   if (typeof error === 'string') {
+    //for string error message
     message = error;
   } else if (error instanceof Array) {
+    //for array object error message
     message = error.map(err => err.message);
+  } else if (typeof error === 'object' && error.isJoi === true) {
+    //for array joi error message
+    let { details = [] } = error;
+    message = details.map(err => err.message);
   } else if (typeof error === 'object') {
+    //for other message
     message = error.message ? error.message : error;
   }
+
   return new APIError(message, status);
 };

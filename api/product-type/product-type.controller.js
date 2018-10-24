@@ -17,11 +17,15 @@ export const changeStatus = async (req, res) => {
       status: req.params.status,
       ids   : req.body.ids
     };
-    const { error, value } = res.VALIDATION(reqData, shemaChangeStatus);
+    const { error, value } = req.VALIDATION(reqData, shemaChangeStatus);
     if (error) {
-      return res.ERROR(error.details);
+      return res.ERROR(error);
     }
-    let data = await service.changeStatusProductType(reqData.ids, reqData.status);
+    let obj = {
+      status     : reqData.status,
+      updatedUser: 'phongUpdated'
+    };
+    let data = await service.changeStatusProductType(reqData.ids, obj);
     if (data) {
       return res.SUCCESS(value.ids);
     } else {
@@ -40,13 +44,14 @@ export const add = async (req, res) => {
       description: query.description
     };
 
-    let { error } = res.VALIDATION(data, shemaModify);
-
+    let { error } = req.VALIDATION(data, shemaModify);
+    data.updatedUser = 'phongUpdated';
+    data.createdUser = 'phongCreated';
     if (error) {
-      return res.ERROR(error.details);
+      return res.ERROR(error);
     }
     let id = await service.addProductType(data);
-    return res.SUCCESS(id);
+    return res.SUCCESS({ id });
   } catch (e) {
     return res.ERROR(e);
   }
@@ -62,12 +67,13 @@ export const update = async (req, res) => {
       name       : body.name,
       images     : body.images
     };
-    let { error } = res.VALIDATION(data, shemaModify);
+    let { error } = req.VALIDATION(data, shemaModify);
     if (error) {
-      return res.ERROR(error.details);
+      return res.ERROR(error);
     }
-    let obj = await service.updateProductType(id, data);
-    return res.SUCCESS(obj);
+    data.updatedUser = 'updatedUser';
+    await service.updateProductType(id, data);
+    return res.SUCCESS({ id });
   } catch (e) {
     return res.ERROR(e);
   }

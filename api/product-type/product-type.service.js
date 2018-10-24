@@ -20,9 +20,9 @@ export const addProductType = async type => {
   }
 };
 
-export const changeStatusProductType = async (ids = [], status) => {
+export const changeStatusProductType = async (ids = [], obj) => {
   try {
-    let data = await model.updateMany({ _id: { $in: ids } }, { $set: { status: status } }, { runValidators: true });
+    let data = await model.update({ _id: { $in: ids } }, obj, { runValidators: true, multi: true });
     if (data) {
       return ids;
     } else {
@@ -33,12 +33,10 @@ export const changeStatusProductType = async (ids = [], status) => {
   }
 };
 
-export const updateProductType = async (id, data) => {
+export const updateProductType = async (id, type) => {
   try {
-    data = removeUndefinedKey(data);
-    data.updated_user = '';
-    data.updated_date = '';
-    let res = await model.updateOne({ _id: id }, data, { runValidators: true });
+    type = removeUndefinedKey(type);
+    let res = await model.updateOne({ _id: id }, type, { runValidators: true });
     return !!res;
   } catch (e) {
     throw e;
