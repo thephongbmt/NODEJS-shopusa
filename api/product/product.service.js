@@ -1,26 +1,51 @@
 import model from './product.model';
+import modelType from '../product-type/product-type.model';
 import { MESSAGE, STATUS } from '../../constant';
+import { removeUndefinedKey } from '../../utils';
 
-export const getProduct = async (product, option) => {
-  return await model.find(
-    {
-      name         : product.name,
-      status       : { $ne: STATUS.DELETE },
-      productTypeId: product.productTypeId,
-      price        : product.price
-    },
-    null,
-    {
-      skip : option.skip,
-      limit: option.limit,
-      sort : option.sort
-    }
-  );
+export const getProduct = async (product = {}) => {
+  //set status when filter
+  let statusDefault = [STATUS.ACTIVE, STATUS.INACTIVE];
+  if (product && product.status) {
+    statusDefault = [product.status];
+  }
+  //get ative list type
+  let idsTypeObj = await modelType.find({ status: 'active' }).select({ _id: 1 });
+  let idsTypeArr = idsTypeObj.map(obj => {
+    return obj._id.toString();
+  });
+  let typeDefault = idsTypeArr;
+  if (idsTypeArr.indexOf(product.productTypeId) > -1) {
+    typeDefault = [product.productTypeId];
+  } else {
+    typeDefault = [];
+  }
+
+  //prepare data for query
+  let query = removeUndefinedKey({
+    name         : product.name,
+    status       : { $in: statusDefault },
+    productTypeId: { $in: typeDefault },
+    price        : product.price
+  });
+  let option = removeUndefinedKey({
+    skip : product.skip,
+    limit: product.limit,
+    sort : product.sort
+  });
+
+  return await model.find(query, null, option).populate({
+    path  : 'productTypeId',
+    select: 'name images description'
+  });
 };
 
 export const getProductById = async id => {
   try {
-    return await model.findOne({ id: id });
+    return await model.findOne({ _id: id }).populate({
+      path  : 'productTypeId',
+      select: 'name images description'
+    });
   } catch (e) {
     throw e.message;
   }
@@ -37,6 +62,7 @@ export const addProduct = async product => {
 
 export const updateProduct = async (id, data) => {
   try {
+    data = removeUndefinedKey(data);
     let obj = await model.update({ _id: id }, data);
     return obj;
   } catch (e) {

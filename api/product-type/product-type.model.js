@@ -15,6 +15,6 @@ const productTypeSchema = new Schema(
   }
 );
 
-const ProductType = mongoose.model('ProductType', productTypeSchema);
+const ProductType = mongoose.model('ProductType', productTypeSchema, 'ProductType');
 
 export default ProductType;

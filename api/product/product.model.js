@@ -18,6 +18,6 @@ const productSchema = new Schema(
   }
 );
 
-const Product = moongse.model('Product', productSchema);
+const Product = moongse.model('Product', productSchema, 'Product');
 
 export default Product;

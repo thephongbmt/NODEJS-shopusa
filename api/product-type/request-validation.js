@@ -15,3 +15,14 @@ export const shemaModify = joi.object().keys({
   description: joi.string().required(),
   status     : joi.string().valid(STATUS.ENUM)
 });
+
+export const getProdutByType = joi.object().keys({
+  name         : joi.string(),
+  productTypeId: joi.string(),
+  ids          : joi.string().required(),
+  status       : joi.string().valid(STATUS.ENUM),
+  price        : joi.number().min(0),
+  offset       : joi.number().min(0),
+  limit        : joi.number().min(0),
+  sort         : joi.string()
+});

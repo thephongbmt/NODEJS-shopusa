@@ -8,6 +8,5 @@ export default route => {
   route.put(`${ROUTE_NAME}/:id`, update);
   route.get(`${ROUTE_NAME}/`, getAll);
   route.get(`${ROUTE_NAME}/:id/products`, getProductByTypeID);
-
   return route;
 };

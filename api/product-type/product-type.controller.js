@@ -78,3 +78,11 @@ export const update = async (req, res) => {
     return res.ERROR(e);
   }
 };
+
+// export const getProductByTypeID = (req, res) => {
+//   let id = req.param.id;
+//   let option = req.query;
+//   let data = {
+//     price: query
+//   };
+// };
