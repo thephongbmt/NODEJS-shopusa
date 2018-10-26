@@ -3,7 +3,7 @@ import modelType from '../product-type/product-type.model';
 import { MESSAGE, STATUS } from '../../constant';
 import { removeUndefinedKey } from '../../utils';
 
-export const getProduct = async (product = {}) => {
+export const getProduct = async (product = {}, optionQuery = {}) => {
   //set status when filter
   let statusDefault = [STATUS.ACTIVE, STATUS.INACTIVE];
   if (product && product.status) {
@@ -29,9 +29,9 @@ export const getProduct = async (product = {}) => {
     price        : product.price
   });
   let option = removeUndefinedKey({
-    skip : product.skip,
-    limit: product.limit,
-    sort : product.sort
+    skip : optionQuery.skip,
+    limit: optionQuery.limit,
+    sort : optionQuery.sort
   });
 
   return await model.find(query, null, option).populate({

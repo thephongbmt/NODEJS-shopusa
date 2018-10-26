@@ -1,4 +1,5 @@
 import model from './product-type.model';
+import modelProduct from '../product/product.model';
 import { MESSAGE, STATUS } from '../../constant';
 import { removeUndefinedKey } from '../../utils';
 export const getProductType = async () => {
@@ -10,11 +11,11 @@ export const getProductType = async () => {
   }
 };
 
-export const addProductType = async type => {
+export const addProductType = async data => {
   try {
-    type = removeUndefinedKey(type);
-    let data = await model.create(type);
-    return data._id;
+    data = removeUndefinedKey(data);
+    let result = await model.create(data);
+    return result._id;
   } catch (e) {
     throw e;
   }
@@ -33,12 +34,41 @@ export const changeStatusProductType = async (ids = [], obj) => {
   }
 };
 
-export const updateProductType = async (id, type) => {
+export const updateProductType = async (id, data) => {
   try {
-    type = removeUndefinedKey(type);
-    let res = await model.updateOne({ _id: id }, type, { runValidators: true });
+    data = removeUndefinedKey(data);
+    let res = await model.updateOne({ _id: id }, data, { runValidators: true });
     return !!res;
   } catch (e) {
     throw e;
   }
+};
+
+export const findByid = async id => {
+  try {
+    let data = await model.findById(id);
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
+export const getProductByTypeID = async (query = {}, option = {}) => {
+  let obj = await findByid(query.productTypeId);
+  let result = [];
+  query = removeUndefinedKey({
+    price : query.price,
+    status: query.status,
+    name  : query.name
+  });
+  option = removeUndefinedKey({
+    skip : option.skip,
+    limit: option.limit,
+    sort : option.sort
+  });
+
+  if (obj && obj.status === STATUS.ACTIVE) {
+    let result = modelProduct.find(query, null, option);
+    return result;
+  }
+  return result;
 };

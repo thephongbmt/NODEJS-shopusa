@@ -1,6 +1,6 @@
 import * as service from './product-type.service';
 import { MESSAGE } from '../../constant';
-import { shemaModify, shemaChangeStatus } from './request-validation';
+import { shemaModify, shemaChangeStatus, getProdutByType } from './product-validation';
 
 export const getAll = async (req, res) => {
   try {
@@ -79,10 +79,27 @@ export const update = async (req, res) => {
   }
 };
 
-// export const getProductByTypeID = (req, res) => {
-//   let id = req.param.id;
-//   let option = req.query;
-//   let data = {
-//     price: query
-//   };
-// };
+export const getProductByTypeID = async (req, res) => {
+  try {
+    let id = req.param.id;
+    let option = req.query;
+    let data = {
+      price        : option.price && +option.price,
+      name         : option.name,
+      productTypeId: id,
+      status       : option.status,
+      offset       : option.offset && +option.offset,
+      limit        : option.limit && +option.limit,
+      sort         : option.sort
+    };
+
+    const { error } = req.VALIDATION(data, getProdutByType);
+    if (error) {
+      res.ERROR(error);
+    }
+    let result = await service.getProductByTypeID(data);
+    res.SUCCESS(result);
+  } catch (e) {
+    res.ERROR(e);
+  }
+};

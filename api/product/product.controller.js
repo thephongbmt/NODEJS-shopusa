@@ -22,19 +22,21 @@ export const getAll = async (req, res) => {
     name         : query.name,
     status       : query.status,
     productTypeId: query.productTypeId,
-    price        : query.price && +query.price,
-    sort         : query.sort,
-    offset       : query.offset && +query.offset,
-    limit        : query.limit && +query.limit
+    price        : query.price && +query.price
+  };
+  let option = {
+    sort  : query.sort,
+    offset: query.offset && +query.offset,
+    limit : query.limit && +query.limit
   };
 
-  const { error, value } = req.VALIDATION(dataSearch, schema.schemaGet);
+  const { error, value } = req.VALIDATION({ ...dataSearch, ...option }, schema.schemaGet);
   if (error) {
     res.ERROR(error);
   }
   value.createdUser = 'phongcreate';
   value.updatedUser = 'updatedUser';
-  let data = await service.getProduct(dataSearch);
+  let data = await service.getProduct(dataSearch, option);
   return res.SUCCESS(data);
 };
 export const update = () => {};
