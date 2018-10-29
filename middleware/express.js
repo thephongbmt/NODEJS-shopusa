@@ -12,13 +12,14 @@ export const middleware = {
     app.use((req, res, next) => {
       let resSuccess = (data, status = httpStatus.OK) => {
         let dataObj = data;
-        return res.status(status).json({ data: dataObj });
+        return res.status(status).json({ status: true, data: dataObj });
       };
 
       let resError = (message = MESSAGE.ERROR_MESSAGE_DEFAULT, status = httpStatus.INTERNAL_SERVER_ERROR) => {
         next({ message, status });
       };
       let reqValidation = (data, shema) => joi.validate(data, shema, { abortEarly: false });
+      // add in request
       req.VALIDATION = reqValidation;
       res.SUCCESS = resSuccess;
       res.ERROR = resError;
@@ -29,7 +30,7 @@ export const middleware = {
   */
   handleNotFoundRequest: app => {
     app.use((req, res, next) => {
-      return next(res.ERROR('OPs going some where !', httpStatus.NOT_FOUND, false));
+      return next(res.ERROR(MESSAGE.NOT_FOUND_ROUTE, httpStatus.NOT_FOUND, false));
     });
   },
   /*
@@ -41,10 +42,12 @@ export const middleware = {
       let message =
         req.query.error === '1'
           ? {
+            status : false,
             message: apiError.message,
             stack  : apiError.stack
           }
           : {
+            status : false,
             message: apiError.message //${apiError.status}-${httpStatus[`${apiError.status}_NAME`]}`
           };
 

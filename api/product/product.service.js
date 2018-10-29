@@ -15,12 +15,13 @@ export const getProduct = async (product = {}, optionQuery = {}) => {
     return obj._id.toString();
   });
   let typeDefault = idsTypeArr;
-  if (idsTypeArr.indexOf(product.productTypeId) > -1) {
-    typeDefault = [product.productTypeId];
-  } else {
-    typeDefault = [];
+  if (product.productTypeId) {
+    if (idsTypeArr.indexOf(product.productTypeId) > -1) {
+      typeDefault = [product.productTypeId];
+    } else {
+      typeDefault = [];
+    }
   }
-
   //prepare data for query
   let query = removeUndefinedKey({
     name         : product.name,
@@ -63,7 +64,7 @@ export const addProduct = async product => {
 export const updateProduct = async (id, data) => {
   try {
     data = removeUndefinedKey(data);
-    let obj = await model.update({ _id: id }, data);
+    let obj = await model.updateOne({ _id: id }, data);
     return obj;
   } catch (e) {
     throw e.message;

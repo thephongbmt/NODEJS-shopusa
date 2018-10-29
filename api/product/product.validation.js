@@ -8,6 +8,7 @@ export const schemanModify = joi.object().keys({
   price        : joi.number(),
   status       : joi.string().valid(STATUS.ENUM)
 });
+
 export const schemaGet = joi.object().keys({
   name         : joi.string(),
   productTypeId: joi.string(),

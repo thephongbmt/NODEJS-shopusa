@@ -39,7 +39,22 @@ export const getAll = async (req, res) => {
   let data = await service.getProduct(dataSearch, option);
   return res.SUCCESS(data);
 };
-export const update = () => {};
+export const update = async (req, res) => {
+  try {
+    let body = req.body;
+    let id = req.params.id;
+    const { error, value } = req.VALIDATION(body, schema.schemanModify);
+    if (error) {
+      res.ERROR(error);
+    }
+    value.createdUser = 'phongcreate';
+    value.updatedUser = 'updatedUser';
+    await service.updateProduct(id, value);
+    return res.SUCCESS({ id });
+  } catch (e) {
+    return res.ERROR(e);
+  }
+};
 export const changeStatus = () => {};
 export const getById = () => {};
 export const getListNewProduct = () => {};

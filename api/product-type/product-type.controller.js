@@ -81,7 +81,7 @@ export const update = async (req, res) => {
 
 export const getProductByTypeID = async (req, res) => {
   try {
-    let id = req.param.id;
+    let id = req.params.id;
     let option = req.query;
     let data = {
       price        : option.price && +option.price,

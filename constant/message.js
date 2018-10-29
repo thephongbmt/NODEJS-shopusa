@@ -8,5 +8,6 @@ export default {
 
   //Message resposne
   INVALID              : 'is invalid',
-  ERROR_MESSAGE_DEFAULT: 'Some thing wrong !'
+  ERROR_MESSAGE_DEFAULT: 'Some thing wrong !',
+  NOT_FOUND_ROUTE      : 'Ops! Going somewhere'
 };

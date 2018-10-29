@@ -44,7 +44,7 @@ export const updateProductType = async (id, data) => {
   }
 };
 
-export const findByid = async id => {
+export const findById = async id => {
   try {
     let data = await model.findById(id);
     return data;
@@ -53,12 +53,13 @@ export const findByid = async id => {
   }
 };
 export const getProductByTypeID = async (query = {}, option = {}) => {
-  let obj = await findByid(query.productTypeId);
+  let obj = await findById(query.productTypeId);
   let result = [];
   query = removeUndefinedKey({
-    price : query.price,
-    status: query.status,
-    name  : query.name
+    price        : query.price,
+    status       : query.status,
+    name         : query.name,
+    productTypeId: query.productTypeId
   });
   option = removeUndefinedKey({
     skip : option.skip,
