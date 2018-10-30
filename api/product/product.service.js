@@ -37,7 +37,7 @@ export const getProduct = async (product = {}, optionQuery = {}) => {
 
   return await model.find(query, null, option).populate({
     path  : 'productTypeId',
-    select: 'name images description'
+    select: 'name status images description'
   });
 };
 
@@ -73,11 +73,7 @@ export const updateProduct = async (id, data) => {
 
 export const changeStatusProducts = async (ids, status) => {
   try {
-    let multiUpdate = [];
-    ids.map(id => {
-      multiUpdate.push(model.update({ _id: id }, { status: status }));
-    });
-    let isAlreadyDone = await Promise.all(multiUpdate);
+    let isAlreadyDone = await model.updateMany({ _id: { $in: ids } }, status);
     if (isAlreadyDone) {
       return isAlreadyDone;
     } else {

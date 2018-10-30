@@ -1,6 +1,6 @@
 import * as service from './product.service';
 import * as schema from './product.validation';
-
+import { MESSAGE } from '../../constant';
 export const add = async (req, res) => {
   try {
     let body = req.body;
@@ -55,7 +55,30 @@ export const update = async (req, res) => {
     return res.ERROR(e);
   }
 };
-export const changeStatus = () => {};
+export const changeStatus = async (req, res) => {
+  try {
+    let reqData = {
+      status: req.params.status,
+      ids   : req.body.ids
+    };
+    const { error, value } = req.VALIDATION(reqData, schema.changeStatus);
+    if (error) {
+      return res.ERROR(error);
+    }
+    let obj = {
+      status     : reqData.status,
+      updatedUser: 'phongUpdated'
+    };
+    let data = await service.changeStatusProducts(reqData.ids, obj);
+    if (data) {
+      return res.SUCCESS(value.ids);
+    } else {
+      return res.ERROR(MESSAGE.CHANGE_STATUS_FAIL);
+    }
+  } catch (e) {
+    return res.ERROR(e);
+  }
+};
 export const getById = () => {};
 export const getListNewProduct = () => {};
 

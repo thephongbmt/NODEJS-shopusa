@@ -18,3 +18,8 @@ export const schemaGet = joi.object().keys({
   limit        : joi.number().min(0),
   sort         : joi.string()
 });
+
+export const changeStatus = joi.object().keys({
+  ids   : joi.array(),
+  status: joi.string().valid(STATUS.ENUM)
+});
